@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 //panggil model Petugas
 use App\Models\PetugasModel;
 
@@ -31,7 +33,9 @@ class PetugasController extends Controller
             'hp' => $request->hp
         ]);
 
-        return redirect('/petugas');
+        // return redirect('/petugas');
+
+        return redirect('/' . Auth::user()->role .'/petugas')->with('success', 'Data petugas berhasil ditambahkan!');
     }
 
      //method untuk hapus data petugas
@@ -39,7 +43,7 @@ class PetugasController extends Controller
      {
          $datapetugas=PetugasModel::find($id_petugas);
          $datapetugas->delete();
- 
+
          return redirect()->back();
      }
 
@@ -58,5 +62,22 @@ class PetugasController extends Controller
         $id_petugas->save();
 
         return redirect()->back();
+
+        // Cari data anggota berdasarkan ID
+        $id_petugas = PetugasModel::find($id_petugas);
+
+        // Periksa apakah data ditemukan
+        if (!$petugas) {
+            return redirect()->back()->with('error', 'Data petugas tidak ditemukan.');
+        }
+
+        // Update data petugas
+        $petugas->nama_petugas = $request->nama_petugas;
+        $petugas->hp = $request->hp;
+        $petugas->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil diperbarui.');
+
     }
 }

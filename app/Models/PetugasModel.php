@@ -10,5 +10,9 @@ class PetugasModel extends Model
     use HasFactory;
     protected $table        = "petugas";
     protected $primaryKey   = "id_petugas";
-    protected $fillable     = ['id_petugas','nama_petugas','hp'];
+
+    public $incrementing = true; // Menentukan bahwa primary key auto increment
+    protected $keyType = 'int'; // Jenis data primary key
+
+    protected $fillable     = ['nama_petugas','hp'];
 }

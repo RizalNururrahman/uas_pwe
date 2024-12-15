@@ -118,11 +118,16 @@
                         </div>
                         <!-- Akhir Modal EDIT data Peminjaman -->
                         |
-                        <a href="pinjam/hapus/{{$p->id_pinjam}}" onclick="return confirm('Yakin mau dihapus?')">
+                        {{-- <a href="pinjam/hapus/{{$p->id_pinjam}}" onclick="return confirm('Yakin mau dihapus?')">
                             <button class="btn-danger">
                                 Delete
                             </button>
-                        </a>
+                        </a> --}}
+                        <form action="{{route('pinjam.hapus', $p->id_pinjam)}}" method="POST" onsubmit="return confirm('Yakin mau dihapus?')" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

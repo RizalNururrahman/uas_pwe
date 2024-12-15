@@ -18,6 +18,8 @@ use App\Models\AnggotaModel;
 //memanggil model BukuModel
 use App\Models\BukuModel;
 
+use Illuminate\Support\Facades\Auth;
+
 use Barryvdh\DomPDF\Facade\PDF;
 
 class PinjamController extends Controller
@@ -49,7 +51,8 @@ class PinjamController extends Controller
             'id_anggota' => $request->id_anggota,
             'id_buku' => $request->id_buku
         ]);
-        return redirect('/pinjam');
+        // return redirect('/pinjam');
+        return redirect('/' . Auth::user()->role .'/pinjam')->with('success', 'Data peminjaman berhasil ditambahkan!');
     }
 
     //method untuk hapus data peminjaman
@@ -58,7 +61,7 @@ class PinjamController extends Controller
         $datapinjam=PinjamModel::find($id_pinjam);
         $datapinjam->delete();
 
-        $id_pinjam->save();
+        // $id_pinjam->save();
 
         return redirect()->back();
     }
@@ -80,6 +83,23 @@ class PinjamController extends Controller
         $id_pinjam->save();
 
         return redirect()->back();
+
+        // Cari data anggota berdasarkan ID
+        $id_pinjam = pinjamModel::find($id_pinjam);
+
+        // Periksa apakah data ditemukan
+        if (!$pinjam) {
+            return redirect()->back()->with('error', 'Data pinjam tidak ditemukan.');
+        }
+
+        // Update data pinjam
+        $pinjam->nama_pinjam = $request->nama_pinjam;
+        $pinjam->hp = $request->hp;
+        $pinjam->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('pinjam.index')->with('success', 'Data pinjam berhasil diperbarui.');
+
     }
 
     public function laporanPinjam()

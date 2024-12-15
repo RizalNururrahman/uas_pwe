@@ -70,7 +70,7 @@ class AnggotaController extends Controller
 
         // return redirect()->back();
 
-        // Cari data buku berdasarkan ID
+        // Cari data anggota berdasarkan ID
         $anggota = AnggotaModel::find($id_anggota);
 
         // Periksa apakah data ditemukan
