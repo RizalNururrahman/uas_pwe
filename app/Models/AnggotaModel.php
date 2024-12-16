@@ -14,5 +14,5 @@ class AnggotaModel extends Model
     public $incrementing = true; // Menentukan bahwa primary key auto increment
     protected $keyType = 'int'; // Jenis data primary key
 
-    protected $fillable     = ['nim','nama_anggota','prodi','hp'];
+    protected $fillable     = ['nim','nama_anggota','prodi','hp', 'user_id'];
 }

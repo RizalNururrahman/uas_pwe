@@ -24,7 +24,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url(Auth::user()->role.'/laporan/pinjaman')}}">Laporan</a>
+                    <a class="nav-link" href="{{url(Auth::user()->role.'/laporanpeminjaman')}}">Laporan</a>
                 </li>
 
                 <li class="nav-item">

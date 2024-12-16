@@ -14,9 +14,20 @@ class AnggotaController extends Controller
     //method untuk tampil data anggota
     public function anggotatampil()
     {
-        $dataanggota = AnggotaModel::orderby('id_anggota', 'ASC')
-        ->paginate(5);
+        // $dataanggota = AnggotaModel::orderby('id_anggota', 'ASC')
+        // ->paginate(5);
 
+        // return view('halaman/view_anggota',['anggota'=>$dataanggota]);
+
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data buku
+            $dataanggota = AnggotaModel::orderby('nim', 'ASC')->paginate(5);
+        } else {
+            // User hanya melihat data buku miliknya
+            $dataanggota = AnggotaModel::where('user_id', Auth::id())
+                ->orderby('nim', 'ASC')
+                ->paginate(5);
+        }
         return view('halaman/view_anggota',['anggota'=>$dataanggota]);
     }
 
@@ -34,7 +45,8 @@ class AnggotaController extends Controller
             'nim' => $request->nim,
             'nama_anggota' => $request->nama_anggota,
             'prodi' => $request->prodi,
-            'hp' => $request->hp
+            'hp' => $request->hp,
+            'user_id' => Auth::user()->id
         ]);
 
         // return redirect('/anggota');
@@ -86,6 +98,8 @@ class AnggotaController extends Controller
         $anggota->save();
 
         // Redirect dengan pesan sukses
-        return redirect()->route('anggota.index')->with('success', 'Data anggota berhasil diperbarui.');
+        // return redirect()->route('anggota.index')->with('success', 'Data anggota berhasil diperbarui.');
+        return redirect('/' . Auth::user()->role .'/anggota')->with('success', 'Data anggota berhasil diperbarui.');
+
     }
 }

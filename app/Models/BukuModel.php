@@ -14,5 +14,5 @@ class BukuModel extends Model
     public $incrementing = true; // Menentukan bahwa primary key auto increment
     protected $keyType = 'int'; // Jenis data primary key
 
-    protected $fillable     = ['kode_buku','judul','pengarang','kategori'];
+    protected $fillable     = ['kode_buku','judul','pengarang','kategori', 'user_id'];
 }

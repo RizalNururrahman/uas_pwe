@@ -78,7 +78,7 @@ Route::post('/pinjam/tambah', [PinjamController::class, 'pinjamtambah'])->name('
 Route::put('/pinjam/edit/{id_pinjam}', [PinjamController::class, 'pinjamedit'])->name('pinjam.edit');
 
 // Route untuk halaman laporan
-Route::get('/laporan/pinjaman', [PinjamController::class, 'laporanPinjam'])->name('laporan.pinjam');
+Route::get('/laporanpeminjaman', [PinjamController::class, 'laporanPinjam'])->name('laporan.pinjam');
 
 // Route untuk mengunduh laporan dalam format PDF
 Route::get('/laporan/pinjaman/pdf', [PinjamController::class, 'laporanPinjamPDF'])->name('laporan.pinjam.pdf');
@@ -134,7 +134,7 @@ Route::put('/pinjam/edit/{id_pinjam}', [PinjamController::class, 'pinjamedit'])-
 // Route untuk halaman laporan
 // Route::put('/laporan', 'PinjamController@ViewLaporan');
 
-Route::get('/laporan/pinjaman', [PinjamController::class, 'laporanPinjam'])->name('laporan.pinjam');
+Route::get('/laporanpeminjaman', [PinjamController::class, 'laporanPinjam'])->name('laporan.pinjam');
 
 // Route untuk mengunduh laporan dalam format PDF
 Route::get('/laporan/pinjaman/pdf', [PinjamController::class, 'laporanPinjamPDF'])->name('laporan.pinjam.pdf');

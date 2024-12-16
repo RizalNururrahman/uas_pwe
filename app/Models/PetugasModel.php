@@ -14,5 +14,5 @@ class PetugasModel extends Model
     public $incrementing = true; // Menentukan bahwa primary key auto increment
     protected $keyType = 'int'; // Jenis data primary key
 
-    protected $fillable     = ['nama_petugas','hp'];
+    protected $fillable     = ['nama_petugas','hp','user_id'];
 }

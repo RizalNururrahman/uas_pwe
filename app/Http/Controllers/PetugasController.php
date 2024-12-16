@@ -14,9 +14,20 @@ class PetugasController extends Controller
     //method untuk tampil data Petugas
     public function petugastampil()
     {
-        $datapetugas = PetugasModel::orderby('id_petugas', 'ASC')
-        ->paginate(5);
+        // $datapetugas = PetugasModel::orderby('id_petugas', 'ASC')
+        // ->paginate(5);
 
+        // return view('halaman/view_petugas',['petugas'=>$datapetugas]);
+
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data buku
+            $datapetugas = PetugasModel::orderby('nama_petugas', 'ASC')->paginate(5);
+        } else {
+            // User hanya melihat data buku miliknya
+            $datapetugas = PetugasModel::where('user_id', Auth::id())
+                ->orderby('nama_petugas', 'ASC')
+                ->paginate(5);
+        }
         return view('halaman/view_petugas',['petugas'=>$datapetugas]);
     }
 
@@ -30,7 +41,8 @@ class PetugasController extends Controller
 
         PetugasModel::create([
             'nama_petugas' => $request->nama_petugas,
-            'hp' => $request->hp
+            'hp' => $request->hp,
+            'user_id' => Auth::user()->id
         ]);
 
         // return redirect('/petugas');
@@ -77,7 +89,8 @@ class PetugasController extends Controller
         $petugas->save();
 
         // Redirect dengan pesan sukses
-        return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil diperbarui.');
+        // return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil diperbarui.');
+        return redirect('/' . Auth::user()->role .'/petugas')->with('success', 'Data petugas berhasil diperbarui.');
 
     }
 }

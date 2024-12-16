@@ -15,7 +15,8 @@ class PinjamModel extends Model
     protected $keyType = 'int'; // Jenis data primary key
 
     // protected $fillable     = ['id_pinjam','id_petugas','id_anggota','id_buku'];
-    protected $fillable     = ['id_petugas','id_anggota','id_buku'];
+
+    protected $fillable     = ['id_petugas','id_anggota','id_buku','user_id'];
 
     //relasi ke petugas
     public function petugas()

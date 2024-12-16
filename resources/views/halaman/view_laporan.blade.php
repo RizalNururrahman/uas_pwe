@@ -5,8 +5,8 @@
     <h3><center>Laporan Data Peminjaman</center></h3>
     <h3><center>Perpustakaan Universitas Mercu Buana</center></h3>
 
-    <a href="{{ route('laporan.pinjam.pdf') }}" class="btn btn-danger">Export PDF</a>
-
+    {{-- <a href="{{ route('laporan.pinjam.pdf') }}" class="btn btn-danger">Export PDF</a> --}}
+    <a class="btn btn-danger" href="{{url(Auth::user()->role.'/laporan/pinjaman/pdf')}}">Export PDF</a>
     <table class="table table-bordered table-striped mt-3">
         <thead>
             <tr>

@@ -14,22 +14,22 @@ class BukuController extends Controller
     //method untuk tampil data buku
     public function bukutampil()
     {
-        $databuku = BukuModel::orderby('kode_buku', 'ASC')
-        ->paginate(5);
+        // $databuku = BukuModel::orderby('kode_buku', 'ASC')
+        // ->paginate(5);
 
-        return view('halaman/view_buku',['buku'=>$databuku]);
+        // return view('halaman/view_buku',['buku'=>$databuku]);
 
-        // if (Auth::user()->role === 'admin') {
-        //     // Admin melihat semua data buku
-        //     $databuku = BukuModel::orderby('kode_buku', 'ASC')->paginate(5);
-        // } else {
-        //     // User hanya melihat data buku miliknya
-        //     $databuku = BukuModel::where('user_id', Auth::id())
-        //         ->orderby('kode_buku', 'ASC')
-        //         ->paginate(5);
-        // }
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data buku
+            $databuku = BukuModel::orderby('kode_buku', 'ASC')->paginate(5);
+        } else {
+            // User hanya melihat data buku miliknya
+            $databuku = BukuModel::where('user_id', Auth::id())
+                ->orderby('kode_buku', 'ASC')
+                ->paginate(5);
+        }
 
-        // return view('halaman/view_buku', ['buku' => $databuku]);
+        return view('halaman/view_buku', ['buku' => $databuku]);
     }
 
     //method untuk tambah data buku
@@ -49,7 +49,8 @@ class BukuController extends Controller
         'judul' => $request->judul,
         'pengarang' => $request->pengarang,
         'kategori' => $request->kategori,
-        // 'user_id' => Auth::id(),
+        // 'user_id' => Auth::id()
+        'user_id' => Auth::user()->id
     ]);
 
     // Redirect kembali ke halaman buku dengan pesan sukses
@@ -115,7 +116,8 @@ class BukuController extends Controller
     $buku->save();
 
     // Redirect dengan pesan sukses
-    return redirect()->route('buku.index')->with('success', 'Data buku berhasil diperbarui.');
+    // return redirect()->route('buku.index')->with('success', 'Data buku berhasil diperbarui.');
+    return redirect('/' . Auth::user()->role .'/buku')->with('success', 'Data buku berhasil diperbarui.');
     }
 
 }

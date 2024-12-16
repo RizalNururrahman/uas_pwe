@@ -27,8 +27,18 @@ class PinjamController extends Controller
     //method untuk tampil data peminjaman
     public function pinjamtampil()
     {
-        $datapinjam = PinjamModel::orderby('id_pinjam', 'ASC')
-        ->paginate(5);
+        // $datapinjam = PinjamModel::orderby('id_pinjam', 'ASC')
+        // ->paginate(5);
+
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data buku
+            $datapinjam = PinjamModel::orderby('id_pinjam', 'ASC')->paginate(5);
+        } else {
+            // User hanya melihat data buku miliknya
+            $datapinjam = PinjamModel::where('user_id', Auth::id())
+                ->orderby('id_pinjam', 'ASC')
+                ->paginate(5);
+        }
 
         $datapetugas    = PetugasModel::all();
         $dataanggota      = AnggotaModel::all();
@@ -49,8 +59,10 @@ class PinjamController extends Controller
         PinjamModel::create([
             'id_petugas' => $request->id_petugas,
             'id_anggota' => $request->id_anggota,
-            'id_buku' => $request->id_buku
+            'id_buku' => $request->id_buku,
+            'user_id' => Auth::user()->id
         ]);
+
         // return redirect('/pinjam');
         return redirect('/' . Auth::user()->role .'/pinjam')->with('success', 'Data peminjaman berhasil ditambahkan!');
     }
@@ -98,21 +110,47 @@ class PinjamController extends Controller
         $pinjam->save();
 
         // Redirect dengan pesan sukses
-        return redirect()->route('pinjam.index')->with('success', 'Data pinjam berhasil diperbarui.');
+        // return redirect()->route('pinjam.index')->with('success', 'Data pinjam berhasil diperbarui.');
+        return redirect('/' . Auth::user()->role .'/pinjam')->with('success', 'Data peminjaman berhasil diperbarui.');
 
     }
 
     public function laporanPinjam()
     {
-        $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])->orderby('id_pinjam', 'ASC')->get();
+        // $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])->orderby('id_pinjam', 'ASC')->get();
 
+        // return view('halaman/view_laporan', compact('datapinjam'));
+
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data peminjaman
+            $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])
+            ->orderby('id_pinjam', 'ASC')
+            ->get();
+        } else {
+            // User hanya melihat data peminjaman miliknya
+            $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])
+            ->where('user_id', Auth::id())
+            ->orderby('id_pinjam', 'ASC')
+            ->get();
+        }
         return view('halaman/view_laporan', compact('datapinjam'));
     }
 
     public function laporanPinjamPDF()
     {
-        $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])->orderby('id_pinjam', 'ASC')->get();
-
+        // $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])->orderby('id_pinjam', 'ASC')->get();
+        if (Auth::user()->role === 'admin') {
+            // Admin melihat semua data peminjaman
+            $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])
+            ->orderby('id_pinjam', 'ASC')
+            ->get();
+        } else {
+            // User hanya melihat data peminjaman miliknya
+            $datapinjam = PinjamModel::with(['petugas', 'anggota', 'buku'])
+            ->where('user_id', Auth::id())
+            ->orderby('id_pinjam', 'ASC')
+            ->get();
+        }
         $pdf = PDF::loadView('halaman/view_laporan_pdf', compact('datapinjam'));
         return $pdf->download('laporan_pinjaman.pdf');
     }

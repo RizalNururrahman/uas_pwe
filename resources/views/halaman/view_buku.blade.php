@@ -90,17 +90,20 @@
                             </div>
                         </div>
                         <!-- Akhir Modal EDIT data buku -->
-                        |
+
                         {{-- <a href="buku/hapus/{{$bk->id_buku}}" onclick="return confirm('Yakin mau dihapus?')">
                             <button class="btn-danger">
                                 Delete
                             </button>
                         </a> --}}
+                        @if (Auth::user()->role === 'admin')
                         <form action="{{ route('buku.hapus', $bk->id_buku) }}" method="POST" onsubmit="return confirm('Yakin mau dihapus?')" style="display: inline;">
+                            |
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger">Delete</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
